@@ -52,10 +52,14 @@ android {
 </pre>
 
 
-### 使用方法
-## 1.识别二维码（条形码）
+## 1.Sample
+<a href="https://github.com/actor20170211030627/zBarLibary/raw/master/app/build/outputs/apk/debug/app-debug.apk">download apk</a> or scan qrcode:  <br/>
+<img src="captures/qrcode.png" width=35%></img>
 
-### 1.1.Activity <I>'示例'</I>
+
+## 2.识别二维码（条形码）
+
+### 2.1.Activity <I>'示例'</I>
 <pre>
 public class TestCustomScanActivity extends QRActivity {
 
@@ -160,12 +164,13 @@ public class TestCustomScanActivity extends QRActivity {
     }
 </pre>
 
-### 1.2. <code>activity_my.xml</code>布局文件 <I>'示例'</I>
+### 2.2. <code>activity_my.xml</code>布局文件 <I>'示例'</I>
 	<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    xmlns:app="http://schemas.android.com/apk/res-auto"
 	    xmlns:tools="http://schemas.android.com/tools"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
 	    tools:context="com.actor.zbarlibaryTest.TestCustomScanActivity">
 	
 	
@@ -182,8 +187,7 @@ public class TestCustomScanActivity extends QRActivity {
 	    <FrameLayout
 	        android:layout_width="match_parent"
 	        android:layout_height="40dp"
-	        android:background="#ff5f00"
-	        android:fitsSystemWindows="true">
+	        android:background="#ff5f00">
 	
 	        <!--返回键-->
 	        <ImageView
@@ -265,7 +269,7 @@ public class TestCustomScanActivity extends QRActivity {
 	</FrameLayout>
 </code>
 
-### 1.3.<code>view_scan.xml</code>中自定义View属性介绍
+### 2.3.<code>view_scan.xml</code>中自定义View属性介绍
 	<!--扫描框的四个角-->
 	<cn.bertsir.zbar.view.CornerView
         android:layout_width="20dp"
@@ -285,5 +289,5 @@ public class TestCustomScanActivity extends QRActivity {
 	    app:slvScanStyle="gridding" />			//扫描样式, 包括:网格, 雷达, 网格+雷达, 线.    默认: 网格
 
 
-## 2.更多功能请查看原作者
+## 3.更多功能请查看原作者
 [zBarLibary](https://github.com/actor20170211030627/zBarLibary "zBarLibary"), 感谢

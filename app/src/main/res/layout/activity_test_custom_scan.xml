@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.actor.zbarlibaryTest.TestCustomScanActivity">
 
 
@@ -26,8 +27,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#ff5f00"
-        android:fitsSystemWindows="true">
+        android:background="#ff5f00">
 
         <!--返回键-->
         <ImageView
