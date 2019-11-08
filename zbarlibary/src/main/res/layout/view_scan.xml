@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:alpha="0.3"
+            android:background="#000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:alpha="0.3"
+                android:background="#000" />
+
+            <FrameLayout
+                android:id="@+id/fl_scan"
+                android:layout_width="@dimen/scan_frame_width"
+                android:layout_height="@dimen/scan_frame_width"
+                android:layout_gravity="center_horizontal">
+
+                <!--扫描框的四个角-->
+                <cn.bertsir.zbar.view.CornerView
+                    android:id="@+id/cnv_left_top"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:cvCornerColor="@color/colorAccent"
+                    app:cvCornerGravity="leftTop"
+                    app:cvCornerWidth="5dp" />
+
+                <cn.bertsir.zbar.view.CornerView
+                    android:id="@+id/cnv_left_bottom"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="bottom|left"
+                    app:cvCornerGravity="leftBottom"
+                    app:cvCornerWidth="5dp" />
+
+                <cn.bertsir.zbar.view.CornerView
+                    android:id="@+id/cnv_right_top"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right|top"
+                    app:cvCornerGravity="rightTop"
+                    app:cvCornerWidth="5dp" />
+
+                <cn.bertsir.zbar.view.CornerView
+                    android:id="@+id/cnv_right_bottom"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right|bottom"
+                    app:cvCornerGravity="rightBottom"
+                    app:cvCornerWidth="5dp" />
+
+                <!--扫描View: 网格、雷达、线条-->
+                <cn.bertsir.zbar.view.ScanLineView
+                    android:id="@+id/iv_scan_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:slvGriddingDensity="40"
+                    app:slvScanColor="@color/colorAccent"
+                    app:slvScanDurationMs="1800"
+                    app:slvScanStyle="gridding_randar" />
+            </FrameLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:alpha="0.3"
+                android:background="#000" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:alpha="0.3"
+            android:background="#000" />
+    </LinearLayout>
+</LinearLayout>

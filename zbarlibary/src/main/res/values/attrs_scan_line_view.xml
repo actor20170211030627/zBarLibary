@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ScanLineView">
+
+        <!--扫描样式, 默认: 网格-->
+        <attr name="slvScanStyle" format="enum">
+            <!--网格-->
+            <enum name="gridding" value="1" />
+            <!--雷达-->
+            <enum name="randar" value="2" />
+            <!--网格 + 雷达-->
+            <enum name="gridding_randar" value="3" />
+            <!--线-->
+            <enum name="line" value="4" />
+        </attr>
+
+        <!--扫描颜色, 默认: colorAccent-->
+        <attr name="slvScanColor" format="color" />
+
+        <!--扫描时间, 单位ms, 默认1800ms-->
+        <attr name="slvScanDurationMs" format="integer" />
+
+        <!--网格密度, 每一行/列 分成多少个小格子, 默认40(样式是网格才有效)-->
+        <attr name="slvGriddingDensity" format="integer" />
+    </declare-styleable>
+</resources>

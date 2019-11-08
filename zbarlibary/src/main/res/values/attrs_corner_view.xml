@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CornerView">
+
+        <!--角的颜色, 默认: colorAccent-->
+        <attr name="cvCornerColor" format="color" />
+
+        <!--角的厚度, 默认10px(像素)-->
+        <attr name="cvCornerWidth" format="dimension" />
+
+        <!--是哪一个角-->
+        <attr name="cvCornerGravity" format="enum">
+            <enum name="leftTop" value="0" />
+            <enum name="leftBottom" value="1" />
+            <enum name="rightTop" value="2" />
+            <enum name="rightBottom" value="3" />
+        </attr>
+    </declare-styleable>
+</resources>

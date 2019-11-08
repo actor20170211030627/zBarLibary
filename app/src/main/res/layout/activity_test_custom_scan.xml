@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.actor.zbarlibaryTest.TestCustomScanActivity">
+
+
+    <!-- 二维码识别界面, 必须要有 -->
+    <cn.bertsir.zbar.CameraPreview
+        android:id="@+id/camera_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--扫描界面(4个角 & 扫描View: 网格、雷达、线条), 可自定义参照修改-->
+    <!--
+    <cn.bertsir.zbar.view.ScanView
+        android:id="@+id/sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+        -->
+    <include layout="@layout/view_scan" />
+
+    <!--标题栏-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#ff5f00"
+        android:fitsSystemWindows="true">
+
+        <!--返回键-->
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:padding="6dp"
+            android:src="@drawable/scanner_back_img" />
+
+        <!--标题-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="扫描二维码"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="140dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="扫一扫"
+            android:textColor="#b3ffffff"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <!--闪光灯-->
+    <ImageView
+        android:id="@+id/iv_flash"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/circle_trans_black"
+        android:padding="5dp"
+        android:src="@drawable/scanner_light" />
+
+    <!--从相册选择-->
+    <ImageView
+        android:id="@+id/iv_album"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/circle_trans_black"
+        android:padding="5dp"
+        android:src="@drawable/scanner_album" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="30dp"
+        android:orientation="vertical">
+
+        <!--垂直SeekBar, 用于缩放镜头-->
+        <cn.bertsir.zbar.view.VerticalSeekBar
+            android:id="@+id/vsb_zoom"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            app:seekBarRotation="CW270" />
+    </LinearLayout>
+</FrameLayout>
