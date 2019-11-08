@@ -1,5 +1,5 @@
 # zBarLibary
-### 1.修改自: [zBarLibary](https://github.com/actor20170211030627/zBarLibary "zBarLibary"), 感谢
+### 1.修改自: [zBarLibary](https://github.com/bertsir/zBarLibary "zBarLibary"), 感谢
 
 做了如下修改:
 <ol>
@@ -290,4 +290,4 @@ public class TestCustomScanActivity extends QRActivity {
 
 
 ## 3.更多功能请查看原作者
-[zBarLibary](https://github.com/actor20170211030627/zBarLibary "zBarLibary"), 感谢
+[zBarLibary](https://github.com/bertsir/zBarLibary "zBarLibary"), 感谢
