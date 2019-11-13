@@ -12,6 +12,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -279,7 +280,7 @@ public class ScanLineView extends View {
     /**
      * @param colorValue 设定扫描的颜色
      */
-    public void setScanColor(int colorValue) {
+    public void setScanColor(@ColorInt int colorValue) {
         this.scanColor = colorValue;
     }
 
