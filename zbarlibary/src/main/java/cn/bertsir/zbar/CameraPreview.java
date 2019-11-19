@@ -18,6 +18,7 @@ package cn.bertsir.zbar;
 import android.content.Context;
 import android.hardware.Camera;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -66,7 +67,11 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
         try {
             mCameraManager.openDriver();
         } catch (Exception e) {
-            Toast.makeText(getContext(), "摄像头权限被拒绝！", Toast.LENGTH_SHORT).show();
+            //edited "摄像头权限被拒绝！", 如果为空就不提示
+            String noPermission = getContext().getResources().getString(R.string.no_permission_for_zbarlibrary);
+            if (!TextUtils.isEmpty(noPermission)) {
+                Toast.makeText(getContext(), noPermission, Toast.LENGTH_SHORT).show();
+            }
             return false;
         }
         mPreviewCallback.onStart();

@@ -2,13 +2,8 @@ package cn.bertsir.zbar;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.widget.Toast;
-
-import java.util.List;
 
 import cn.bertsir.zbar.Qr.ScanResult;
-import cn.bertsir.zbar.utils.PermissionConstants;
-import cn.bertsir.zbar.utils.PermissionUtils;
 
 /**
  * Created by Bert on 2017/9/22.
@@ -44,28 +39,29 @@ public class QrManager {
         }
 
 
-        PermissionUtils.permission(activity, PermissionConstants.CAMERA, PermissionConstants.STORAGE)
-                .rationale(new PermissionUtils.OnRationaleListener() {
-                    @Override
-                    public void rationale(final ShouldRequest shouldRequest) {
-                        shouldRequest.again(true);
-                    }
-                })
-                .callback(new PermissionUtils.FullCallback() {
-                    @Override
-                    public void onGranted(List<String> permissionsGranted) {
+        //edited 权限在外面页面自己判断, 这儿不判断
+//        PermissionUtils.permission(activity, PermissionConstants.CAMERA, PermissionConstants.STORAGE)
+//                .rationale(new PermissionUtils.OnRationaleListener() {
+//                    @Override
+//                    public void rationale(final ShouldRequest shouldRequest) {
+//                        shouldRequest.again(true);
+//                    }
+//                })
+//                .callback(new PermissionUtils.FullCallback() {
+//                    @Override
+//                    public void onGranted(List<String> permissionsGranted) {
                         Intent intent = new Intent(activity, QRActivity.class);
                         intent.putExtra(QrConfig.EXTRA_THIS_CONFIG, options);
                         activity.startActivity(intent);
-                    }
-
-                    @Override
-                    public void onDenied(List<String> permissionsDeniedForever,
-                                         List<String> permissionsDenied) {
-                        Toast.makeText(activity,"摄像头权限被拒绝！", Toast.LENGTH_SHORT).show();
-
-                    }
-                }).request();
+//                    }
+//
+//                    @Override
+//                    public void onDenied(List<String> permissionsDeniedForever,
+//                                         List<String> permissionsDenied) {
+//                        Toast.makeText(activity,"摄像头权限被拒绝！", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                }).request();
 
 
 

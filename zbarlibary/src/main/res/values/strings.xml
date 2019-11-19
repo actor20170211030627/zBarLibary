@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">zBarLibary</string>
+
+    <string name="no_permission_for_zbarlibrary">摄像头权限被拒绝！</string>
+<!--    <string name="get_pic_failure_for_zbarlibrary">获取图片失败！</string>-->
+<!--    <string name="decode_failure_for_zbarlibrary">识别失败！</string>-->
+<!--    <string name="decode_exception_for_zbarlibrary">识别异常！</string>-->
 </resources>
