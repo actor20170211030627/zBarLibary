@@ -50,7 +50,7 @@ public class QrConfig implements Serializable {
     public boolean auto_light = false;
 
 
-    public static  int ding_path = R.raw.qrcode;//默认声音
+    public static  int ding_path = R.raw.beep_di;//默认声音
     public int custombarcodeformat = -1;
 
     public static final int TYPE_QRCODE = 1;//扫描二维码

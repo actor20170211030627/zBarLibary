@@ -46,12 +46,12 @@ import cn.bertsir.zbar.utils.QRUtils;
 public abstract class QRActivity extends AppCompatActivity {
 
     private static final String        TAG = "QRActivity";
-    private              CameraPreview cameraPreview;
-    private              SoundPool     soundPool;
+    protected               CameraPreview cameraPreview;
+    protected              SoundPool     soundPool;
 //    private              ScanView      sv;
     private              TextView      textDialog;
 //    private              QrConfig      options;
-    static final         int           REQUEST_IMAGE_GET = 1;
+    protected static final         int           REQUEST_IMAGE_GET = 1;
 //    static final         int           REQUEST_PHOTO_CUT = 2;
 //    public static final  int           RESULT_CANCELED   = 401;
     protected         float            AUTOLIGHTMIN      = 10F;
@@ -62,10 +62,10 @@ public abstract class QRActivity extends AppCompatActivity {
     private              float         oldDist           = 1f;
 
     //用于检测光线
-    private SensorManager sensorManager;
-    private Sensor        sensor;
+    protected SensorManager sensorManager;
+    protected Sensor        sensor;
+    private ScanCallback resultCallback;//识别结果回调
 
-    private boolean isInit = false;
 
     ////////////////////////////////////////////////////////////////
     //子类可修改的常量
@@ -75,11 +75,10 @@ public abstract class QRActivity extends AppCompatActivity {
     protected boolean    isShowVibrator = false;//振动提醒, 默认false
     protected boolean    isNeedCrop     = true;//是否从相册选择后裁剪图片, 默认true
     protected boolean    isAutoLight    = false;//是否自动灯光, 默认false
-    protected int        dingPath        = R.raw.qrcode;//扫描成功后, 播放的音乐文件, 默认R.raw.qrcode
+    private int        dingPath        = QrConfig.ding_path;//扫描成功后, 播放的音乐文件, 默认R.raw.beep_di
     protected String OPEN_ALBUM_TEXT = "选择要识别的图片";//打开相册的文字
 
     protected Activity activity;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,41 +88,11 @@ public abstract class QRActivity extends AppCompatActivity {
 //        }
         activity = this;
 //        options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
-//        initParm();
 //        setContentView(R.layout.activity_qr);
-//        initView();
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (!isInit) {
-            initParm();
-            initView();
-            isInit = true;
-        }
-    }
 
-    /**
-     * 初始化参数
-     */
-    private void initParm() {
-//        switch (options.getSCREEN_ORIENTATION()) {
-//            case QrConfig.SCREEN_LANDSCAPE:
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//                break;
-//            case QrConfig.SCREEN_PORTRAIT:
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//                break;
-//            case QrConfig.SCREEN_SENSOR:
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-//                break;
-//            default:
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//                break;
-//        }
         //设置扫码类型, 默认全部（二维码，条形码，全部，自定义，默认为二维码）
-        Symbol.scanType = QrConfig.TYPE_ALL/*options.getScan_type()*/;
+        Symbol.scanType = QrConfig.TYPE_QRCODE/*options.getScan_type()*/;
 
         //设置扫描的码的具体类型, 此项只有在扫码类型为TYPE_CUSTOM时才有效
         Symbol.scanFormat = QrConfig.BARCODE_EAN13/*options.getCustombarcodeformat()*/;
@@ -154,18 +123,38 @@ public abstract class QRActivity extends AppCompatActivity {
 
         //自动灯光
         if (isAutoLight/*options.isAuto_light()*/) {
-            getSensorManager();
+            //获取光线传感器
+            sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            if (sensorManager != null) sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         }
-    }
 
-    /**
-     * 初始化布局
-     */
-    private void initView() {
-        cameraPreview = (CameraPreview) findViewById(R.id.camera_preview);
         //bi~
         soundPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
         soundPool.load(this, dingPath/*options.getDing_path()*/, 1);
+
+        resultCallback = new ScanCallback() {//识别结果回调
+            @Override
+            public void onScanResult(ScanResult result) {
+                //播放声音
+                if (isPlaySound/*options.isPlay_sound()*/) {
+                    soundPool.play(1, 1, 1, 0, 0, 1);
+                }
+                //震动提醒
+                if (isShowVibrator/*options.isShow_vibrator()*/) {
+                    QRUtils.getInstance().getVibrator(getApplicationContext());
+                }
+
+                /*QrManager.getInstance().getResultCallback().*/onScanSuccess(result);
+                if (!Symbol.looperScan) onBackPressed();
+            }
+        };
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        cameraPreview = (CameraPreview) findViewById(R.id.camera_preview);
+        cameraPreview.setScanCallback(resultCallback);
 
 //        sv = (ScanView) findViewById(R.id.sv);
 
@@ -183,14 +172,37 @@ public abstract class QRActivity extends AppCompatActivity {
 
         //扫描样式(网格, 雷达, 网格+雷达, 线)
 //        sv.setScanLineStyle(options.getLine_style());
+
+        /**
+         * 在onCreate()中开始扫描, 在onDestory()中停止扫描: 避免跳转页面后闪光灯熄灭
+         * 如果跳转页面后允许闪光灯熄灭, 可以分别在onResume() & onPause()中分别调用 开始/停止扫描 的方法
+         */
+        startScan();
+    }
+
+    /**
+     * 开始扫描
+     */
+    protected void startScan() {
+        if (cameraPreview != null) cameraPreview.start();
+    }
+
+    /**
+     * 停止扫描
+     */
+    protected void stopScan() {
+        if (cameraPreview != null) cameraPreview.stop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (cameraPreview != null) {
-            cameraPreview.setScanCallback(resultCallback);
-            cameraPreview.start();
+//        if (cameraPreview != null) {
+//            cameraPreview.setScanCallback(resultCallback);
+//            cameraPreview.start();
+//        }
+        if (cameraPreview != null) {//开始动画
+            cameraPreview.mPreviewCallback.onStart();
         }
 
         if (sensorManager != null) {
@@ -207,16 +219,6 @@ public abstract class QRActivity extends AppCompatActivity {
     }
 
     /**
-     * 获取光线传感器
-     */
-    protected void getSensorManager() {
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager != null) {
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        }
-    }
-
-    /**
      * 切换闪光灯
      */
     protected void setFlash() {
@@ -224,10 +226,26 @@ public abstract class QRActivity extends AppCompatActivity {
     }
 
     /**
+     * 设置闪光灯
+     */
+    protected void setFlash(boolean open) {
+        if (cameraPreview != null) cameraPreview.setFlash(open);
+    }
+
+    /**
+     * added
+     * @return 闪光灯是否已经打开
+     */
+    protected boolean isFlashOpen() {
+        if (cameraPreview != null) return cameraPreview.isFlashOpen();
+        return false;
+    }
+
+    /**
      * @param zoom 设置镜头缩放, 取值范围: [0, 1]
      */
     protected void setZoom(@FloatRange(from = 0, to = 1) float zoom) {
-        if (cameraPreview != null) cameraPreview.setZoom(zoom);
+        if (cameraPreview != null && zoom >= 0 && zoom <= 1) cameraPreview.setZoom(zoom);
     }
 
     /**
@@ -238,32 +256,7 @@ public abstract class QRActivity extends AppCompatActivity {
         seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
     }
 
-    /**
-     * 识别结果回调
-     */
-    private ScanCallback resultCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(ScanResult result) {
-            //播放声音
-            if (isPlaySound/*options.isPlay_sound()*/) {
-                soundPool.play(1, 1, 1, 0, 0, 1);
-            }
-            //震动提醒
-            if (isShowVibrator/*options.isShow_vibrator()*/) {
-                QRUtils.getInstance().getVibrator(getApplicationContext());
-            }
-
-            if (cameraPreview != null) {
-                cameraPreview.setFlash(false);
-            }
-            /*QrManager.getInstance().getResultCallback().*/onScanSuccess(result);
-            if (!Symbol.looperScan) {
-                onBackPressed();
-            }
-        }
-    };
-
-    private SensorEventListener sensorEventListener = new SensorEventListener() {
+    protected SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
             float light = event.values[0];
@@ -362,7 +355,7 @@ public abstract class QRActivity extends AppCompatActivity {
                                 scanResult.setType(ScanResult.CODE_QR);
                                 /*QrManager.getInstance().getResultCallback().*/onScanSuccess(scanResult);
                                 QRUtils.getInstance().deleteTempFile(cropTempPath);//删除裁切的临时文件
-                                onBackPressed();
+                                if (!Symbol.looperScan) onBackPressed();
                             } else {
                                 //尝试用zxing再试一次识别二维码
                                 final String qrcontent = QRUtils.getInstance().decodeQRcodeByZxing(imagePath);
@@ -372,7 +365,7 @@ public abstract class QRActivity extends AppCompatActivity {
                                     scanResult.setType(ScanResult.CODE_QR);
                                     /*QrManager.getInstance().getResultCallback().*/onScanSuccess(scanResult);
                                     QRUtils.getInstance().deleteTempFile(cropTempPath);//删除裁切的临时文件
-                                    onBackPressed();
+                                    if (!Symbol.looperScan) onBackPressed();
                                 } else {
                                     //再试试是不是条形码
                                     try {
@@ -383,7 +376,7 @@ public abstract class QRActivity extends AppCompatActivity {
                                             scanResult.setType(ScanResult.CODE_BAR);
                                             /*QrManager.getInstance().getResultCallback().*/onScanSuccess(scanResult);
                                             QRUtils.getInstance().deleteTempFile(cropTempPath);//删除裁切的临时文件
-                                            onBackPressed();
+                                            if (!Symbol.looperScan) onBackPressed();
                                         } else {
                                             recognitionLocalFailure(imagePath);
                                             closeProgressDialog();
@@ -503,14 +496,20 @@ public abstract class QRActivity extends AppCompatActivity {
 //        Toast.makeText(getApplicationContext(), "识别异常！", Toast.LENGTH_SHORT).show();
     }
 
+    protected void logError(String msg) {
+        Log.e(TAG, "logError: " + msg);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
-        if (cameraPreview != null) {
-            cameraPreview.stop();
+//        if (cameraPreview != null) {//为何注销掉: 跳转页面后闪光灯不熄灭
+//            cameraPreview.stop();
+//        }
+        if (cameraPreview != null) {//停止动画
+            cameraPreview.mPreviewCallback.onStop();
         }
-        if (sensorManager != null) {
-            //解除注册
+        if (sensorManager != null) {//解除注册
             sensorManager.unregisterListener(sensorEventListener, sensor);
         }
     }
@@ -518,10 +517,8 @@ public abstract class QRActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (cameraPreview != null) {
-            cameraPreview.setFlash(false);
-            cameraPreview.stop();
-        }
+        if (cameraPreview != null) setFlash(false);
+        stopScan();
         soundPool.release();
     }
 }

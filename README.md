@@ -64,28 +64,21 @@ android {
 public class TestCustomScanActivity extends QRActivity {
 
     private VerticalSeekBar vsb_zoom;
+    private ImageView ivLight;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        
-        //布局中必须有一个 id 为 'camera_preview' 的 CameraPreview
-        setContentView(R.layout.activity_test_custom_scan);
 
-        vsb_zoom = findViewById(R.id.vsb_zoom);
-        findViewById(R.id.iv_album).setOnClickListener(this);
-        findViewById(R.id.iv_flash).setOnClickListener(this);
-
-
-        //配置扫描(有默认值, 都可以不配置)
+        //配置扫描, 要在setContentView()之前(有默认值, 都可以不配置)
         isFingerZoom = true;//是否能手势缩放, 默认true
         isPlaySound    = true;//扫描完成后, 是否要播放声音, 默认true
         isShowVibrator = false;//振动提醒, 默认false
         isNeedCrop     = true;//是否从相册选择后裁剪图片, 默认true
         isAutoLight    = false;//是否自动灯光, 默认false
-        dingPath = R.raw.test;//扫描成功后, 播放的音乐文件, 默认R.raw.qrcode
+        QrConfig.ding_path = R.raw.beep_dong;//扫描成功后, 播放的音乐文件, 默认R.raw.beep_di
         OPEN_ALBUM_TEXT = "选择要识别的图片";//打开相册的文字
         //设置扫码类型, 默认全部（二维码，条形码，全部，自定义，默认为二维码）
         Symbol.scanType = QrConfig.TYPE_ALL;
@@ -102,6 +95,13 @@ public class TestCustomScanActivity extends QRActivity {
         //连续扫描间隔时间, 默认1s
         Symbol.looperWaitTime = 1000;
 
+        //布局中必须有一个 id 为 'camera_preview' 的 CameraPreview
+        setContentView(R.layout.activity_test_custom_scan);
+
+        vsb_zoom = findViewById(R.id.vsb_zoom);
+        ivLight = findViewById(R.id.iv_light);
+        findViewById(R.id.iv_album).setOnClickListener(this);
+        ivLight.setOnClickListener(this);
 
         //设置SeekBar颜色
         setSeekBarColor(vsb_zoom, getResources().getColor(R.color.red_E42E30));
@@ -120,6 +120,19 @@ public class TestCustomScanActivity extends QRActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startScan();
+        ivLight.setSelected(isFlashOpen());//设置图片状态
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopScan();
     }
 
     @Override
@@ -157,8 +170,11 @@ public class TestCustomScanActivity extends QRActivity {
             case R.id.iv_album://相册
                 selectImageFromAlbum();
                 break;
-            case R.id.iv_flash://闪光灯
-                setFlash();
+            case R.id.iv_light://闪光灯
+                //setFlash();
+                boolean selected = v.isSelected();
+                v.setSelected(!selected);
+                setFlash(!selected);
                 break;
         }
     }
@@ -229,16 +245,14 @@ public class TestCustomScanActivity extends QRActivity {
 	    </LinearLayout>
 	
 	    <!--闪光灯-->
-	    <ImageView
-	        android:id="@+id/iv_flash"
-	        android:layout_width="30dp"
-	        android:layout_height="30dp"
-	        android:layout_gravity="bottom|right"
-	        android:layout_marginRight="10dp"
-	        android:layout_marginBottom="70dp"
-	        android:background="@drawable/circle_trans_black"
-	        android:padding="5dp"
-	        android:src="@drawable/scanner_light" />
+        <ImageView
+            android:id="@+id/iv_light"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="70dp"
+            android:src="@drawable/selector_light" />
 	
 	    <!--从相册选择-->
 	    <ImageView

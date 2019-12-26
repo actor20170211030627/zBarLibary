@@ -158,6 +158,20 @@ public final class CameraManager {
     }
 
     /**
+     * added
+     * @return 闪光灯是否已经打开
+     */
+    public boolean isFlashOpen() {
+        if(mCamera != null) {
+            Camera.Parameters parameters = mCamera.getParameters();
+            if(parameters.getFlashMode() != null) {
+                return parameters.getFlashMode().endsWith(Camera.Parameters.FLASH_MODE_TORCH);
+            }
+        }
+        return false;
+    }
+
+    /**
      * set Camera Flash
      */
     public void setFlash(){

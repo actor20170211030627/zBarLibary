@@ -16,6 +16,12 @@ android {
         }
     }
     signingConfigs {
+        debug {
+            keyAlias 'actor'
+            keyPassword '123456'
+            storeFile file('actorKey.jks')
+            storePassword '123456'
+        }
         release {
             keyAlias 'actor'
             keyPassword '123456'

@@ -32,7 +32,7 @@ import android.widget.Toast;
 public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback {
 
     private CameraManager      mCameraManager;
-    private CameraScanAnalysis mPreviewCallback;
+    public CameraScanAnalysis mPreviewCallback;
     private SurfaceView        mSurfaceView;
     private boolean            isPreviewStart = false;
 
@@ -64,6 +64,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
      * Camera start preview.
      */
     public boolean start() {
+        //edited "摄像头权限被拒绝！", 如果为空就不提示
         try {
             mCameraManager.openDriver();
         } catch (Exception e) {
@@ -133,7 +134,7 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
     public void surfaceDestroyed(SurfaceHolder holder) {
     }
 
-    private Camera.AutoFocusCallback mFocusCallback = new Camera.AutoFocusCallback() {
+    public Camera.AutoFocusCallback mFocusCallback = new Camera.AutoFocusCallback() {
         public void onAutoFocus(boolean success, Camera camera) {
             postDelayed(mAutoFocusTask, 500);
         }
@@ -155,8 +156,19 @@ public class CameraPreview extends FrameLayout implements SurfaceHolder.Callback
         mCameraManager.setFlash();
     }
 
+    /**
+     * @param open 设置闪光灯是否打开
+     */
     public void setFlash(boolean open) {
         mCameraManager.setFlash(open);
+    }
+
+    /**
+     * added
+     * @return 闪光灯是否已经打开
+     */
+    public boolean isFlashOpen() {
+        return mCameraManager.isFlashOpen();
     }
 
     public void setZoom(float zoom){

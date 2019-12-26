@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setScanViewType(scan_view_type)//设置扫描框类型（二维码还是条形码，默认为二维码）
                 .setCustombarcodeformat(QrConfig.BARCODE_EAN13)//此项只有在扫码类型为TYPE_CUSTOM时才有效
                 .setPlaySound(cb_show_ding.isChecked())//是否扫描成功后bi~的声音
-                .setDingPath(cb_show_custom_ding.isChecked() ? R.raw.test : R.raw.qrcode)//设置提示音(不设置为默认的Ding~)
+                .setDingPath(cb_show_custom_ding.isChecked() ? R.raw.beep_dong : R.raw.beep_di)//设置提示音(不设置为默认的Ding~)
                 .setIsOnlyCenter(cb_only_center.isChecked())//是否只识别框中内容(默认为全屏识别)
                 .setTitleText(et_qr_title.getText().toString())//设置Tilte文字
                 .setTitleBackgroudColor(Color.parseColor("#262020"))//设置状态栏颜色

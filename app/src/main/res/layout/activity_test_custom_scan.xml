@@ -78,7 +78,18 @@
         android:layout_marginBottom="70dp"
         android:background="@drawable/circle_trans_black"
         android:padding="5dp"
-        android:src="@drawable/scanner_light" />
+        android:src="@drawable/scanner_light"
+        android:visibility="gone" />
+
+    <!--闪光灯-->
+    <ImageView
+        android:id="@+id/iv_light"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="70dp"
+        android:src="@drawable/selector_light" />
 
     <!--从相册选择-->
     <ImageView
