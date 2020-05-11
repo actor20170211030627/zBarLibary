@@ -1,4 +1,9 @@
 # zBarLibary
+ <ul>
+     <li><a href="https://github.com/actor20170211030627/zBarLibary">Github</a></li>
+     <li><a href="https://gitee.com/actor20170211030627/zBarLibary">Gitee码云(国内网速更快)</a></li>
+ </ul>
+
 ### 1.修改自: [zBarLibary](https://github.com/bertsir/zBarLibary "zBarLibary"), 感谢
 
 做了如下修改:

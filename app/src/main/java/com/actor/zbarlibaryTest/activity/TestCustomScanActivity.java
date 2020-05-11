@@ -1,4 +1,4 @@
-package com.actor.zbarlibaryTest;
+package com.actor.zbarlibaryTest.activity;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
+
+import com.actor.zbarlibaryTest.R;
 
 import cn.bertsir.zbar.QRActivity;
 import cn.bertsir.zbar.Qr.ScanResult;

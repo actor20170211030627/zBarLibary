@@ -1,11 +1,10 @@
-package com.actor.zbarlibaryTest;
+package com.actor.zbarlibaryTest.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -14,13 +13,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actor.zbarlibaryTest.R;
+import com.actor.zbarlibaryTest.service.CheckUpdateService;
+
 import java.util.List;
 
 import cn.bertsir.zbar.utils.PermissionConstants;
 import cn.bertsir.zbar.utils.PermissionUtils;
 import cn.bertsir.zbar.utils.QRUtils;
 
-public class Main2Activity extends AppCompatActivity implements View.OnClickListener {
+public class Main2Activity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "Main2Activity";
 
@@ -59,6 +61,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                 return true;
             }
         });
+        startService(new Intent(this, CheckUpdateService.class));//检查更新
     }
 
     @Override
@@ -104,5 +107,11 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
 
                     }
                 }).request();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(this, CheckUpdateService.class));
     }
 }

@@ -1,4 +1,4 @@
-package com.actor.zbarlibaryTest;
+package com.actor.zbarlibaryTest.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.actor.zbarlibaryTest.R;
+
 import java.util.List;
 
 import cn.bertsir.zbar.QrConfig;
@@ -24,7 +25,7 @@ import cn.bertsir.zbar.utils.PermissionUtils;
 import cn.bertsir.zbar.utils.QRUtils;
 import cn.bertsir.zbar.view.ScanLineView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private              Button      bt_scan;
     private static final String      TAG = "MainActivity";

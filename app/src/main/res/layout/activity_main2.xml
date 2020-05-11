@@ -7,7 +7,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="com.actor.zbarlibaryTest.Main2Activity">
+    tools:context="com.actor.zbarlibaryTest.activity.Main2Activity">
 
     <ImageView
         android:id="@+id/iv_qr"
